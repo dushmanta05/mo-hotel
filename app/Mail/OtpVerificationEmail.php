@@ -28,7 +28,7 @@ class OtpVerificationEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address('dushbehera05@example.com', 'Dushmanta'),
+            from: new Address('dushbehera05@gmail.com', 'Dushmanta'),
             subject: 'Otp Verification Email',
         );
     }
@@ -39,7 +39,7 @@ class OtpVerificationEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.otp-verification-mail',
+            view: 'mail.otp-verification-mail',
         );
     }
 
