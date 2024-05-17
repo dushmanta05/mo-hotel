@@ -39,6 +39,17 @@ class AuthenticationController extends Controller
 
     public function login(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required | email | exists:users,email',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $otp = $this->generateAndStoreOtp($request->email);
+
+        return response()->json(['message' => 'OTP generated successfully.', 'otp' => $otp], 200);
     }
 
     public function generateAndStoreOtp($email)
@@ -54,5 +65,32 @@ class AuthenticationController extends Controller
         );
 
         return $otp;
+    }
+
+    public function verification(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => "required | string | email",
+            'otp' => 'required | string | size:6'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $otpData = Verification::where('email', $request->email)->first();
+
+        if (!$otpData || $otpData->otp !== $request->otp) {
+            return response()->json(['error' => 'Invalid OTP'], 400);
+        }
+
+        $currentTime = now();
+        $otpUpdatedAt = $otpData->updated_at;
+
+        if ($otpUpdatedAt->addMinutes(10)->greaterThanOrEqualTo($currentTime)) {
+            return response()->json(['message' => 'Email has been verified successfully'], 200);
+        } else {
+            return response()->json(['error' => 'OTP has expired'], 400);
+        }
     }
 }
