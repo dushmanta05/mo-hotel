@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthenticationController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\HotelController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,6 +19,5 @@ Route::post("/register", [AuthenticationController::class, "register"]);
 Route::post("/verification", [AuthenticationController::class, "verification"]);
 Route::post("/login", [AuthenticationController::class, "login"]);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::post("/hotel", [HotelController::class, "create"]);
+Route::get("/hotel/{id}", [HotelController::class, "get"]);
