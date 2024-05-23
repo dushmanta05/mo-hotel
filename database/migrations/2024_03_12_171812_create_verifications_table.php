@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('verifications', function (Blueprint $table) {
-            $table->id()->onDelete('cascade');
+            $table->id();
             $table->string('email')->index();
             $table->string('otp');
             $table->timestamps();

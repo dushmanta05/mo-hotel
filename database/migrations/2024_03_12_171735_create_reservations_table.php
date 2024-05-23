@@ -18,11 +18,11 @@ return new class extends Migration
             $table->date('check_out');
             $table->boolean('status');
             $table->unsignedBigInteger('hotel_id');
-            $table->foreign('hotel_id')->references('id')->on("hotels");
+            $table->foreign('hotel_id')->references('id')->on("hotels")->onDelete('cascade');
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on("users");
+            $table->foreign('user_id')->references('id')->on("users")->onDelete('cascade');
             $table->unsignedBigInteger('room_id');
-            $table->foreign('room_id')->references('id')->on('rooms');
+            $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
         });
     }
 

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('hotels', function (Blueprint $table) {
-            $table->id()->onDelete('cascade');
+            $table->id();
             $table->timestamps();
             $table->string('name');
             $table->text('location');
