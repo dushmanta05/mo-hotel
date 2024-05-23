@@ -39,4 +39,21 @@ class HotelController extends Controller
 
         return response()->json(['data' => $hotel], 200);
     }
+
+    public function delete($id, Request $request)
+    {
+        $hotel = Hotel::with('rooms')->find($id);
+
+        if (!$hotel) {
+            return response()->json(['error' => 'Hotel not found'], 404);
+        }
+
+        foreach ($hotel->rooms as $room) {
+            $room->delete();
+        }
+
+        $hotel->delete();
+
+        return response()->json(['message' => 'Hotel and related rooms deleted successfully'], 200);
+    }
 }

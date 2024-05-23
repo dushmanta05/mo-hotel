@@ -15,9 +15,9 @@ class AuthenticationController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required | string | min:2',
-            'email' => 'required | email | unique:users',
-            'password' => 'required | string | min:6'
+            'name' => 'required|string|min:2',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|string|min:6'
         ]);
 
         if ($validator->fails()) {
@@ -40,7 +40,7 @@ class AuthenticationController extends Controller
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required | email | exists:users,email',
+            'email' => 'required|email|exists:users,email',
         ]);
 
         if ($validator->fails()) {
@@ -70,8 +70,8 @@ class AuthenticationController extends Controller
     public function verification(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => "required | string | email",
-            'otp' => 'required | string | size:6'
+            'email' => "required|string|email",
+            'otp' => 'required|string|size:6'
         ]);
 
         if ($validator->fails()) {
