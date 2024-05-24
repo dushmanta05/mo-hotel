@@ -7,7 +7,6 @@ use App\Mail\OtpVerificationEmail;
 use App\Models\User;
 use App\Models\Verification;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class AuthenticationController extends Controller
@@ -27,7 +26,7 @@ class AuthenticationController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => $request->password,
         ]);
 
         $otp = $this->generateAndStoreOtp($user->email);
@@ -88,9 +87,25 @@ class AuthenticationController extends Controller
         $otpUpdatedAt = $otpData->updated_at;
 
         if ($otpUpdatedAt->addMinutes(10)->greaterThanOrEqualTo($currentTime)) {
-            return response()->json(['message' => 'Email has been verified successfully'], 200);
+
+            $user = User::where('email', $request->email)->first();
+
+            if ($user) {
+                $token = $user->createToken('Token Name')->accessToken;
+
+                return response()->json(['message' => 'Email has been verified successfully', 'access_token' => $token], 200);
+            } else {
+                return response()->json(['error' => 'User not found'], 404);
+            }
         } else {
             return response()->json(['error' => 'OTP has expired'], 400);
         }
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->token()->revoke();
+
+        return response()->json(['message' => 'Successfully logged out']);
     }
 }

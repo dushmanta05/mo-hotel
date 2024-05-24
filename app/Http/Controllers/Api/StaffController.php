@@ -17,7 +17,6 @@ class StaffController extends Controller
             'last_name' => 'required|string|min:2',
             'email' => 'required|email|unique:users',
             'password' => 'required|string|min:6',
-            'number' => 'required|string',
             'dob' => 'required|date|date_format:Y-m-d',
             'gender' => 'required|in:male,female,other',
             'hotel_id' => 'required|integer',
